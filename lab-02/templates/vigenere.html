@@ -1,57 +1,175 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Caesar Cipher</title>
+    <title>VIGENERE CIPHER</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
+    <style>
+        body {
+            background: linear-gradient(135deg, #c7d2fe, #fbc7b8);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            padding: 40px 0;
+            color: #3a1a1a;
+        }
+        .container {
+            max-width: 600px;
+            background: #fff7f5;
+            padding: 30px 40px;
+            border-radius: 20px;
+            box-shadow: 0 12px 30px rgba(251, 199, 184, 0.5);
+        }
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 15px;
+        }
+        tr:first-child td {
+            text-align: center;
+            font-weight: 900;
+            font-size: 28px;
+            padding-bottom: 20px;
+            color: #d95c5c;
+            text-shadow: 1px 1px 4px #fbc7b8;
+        }
+        tr:nth-child(2) td, tr:nth-child(5) td {
+            font-weight: 700;
+            font-size: 18px;
+            color: #a94141;
+            border-bottom: 2px solid #a94141;
+            padding-bottom: 8px;
+        }
+        label {
+            font-weight: 600;
+            color: #7e3b3b;
+            font-size: 1rem;
+        }
+        .form-control {
+            border-radius: 10px;
+            border: 2px solid #d95c5c;
+            box-shadow: 0 4px 8px rgba(217, 92, 92, 0.25);
+            transition: box-shadow 0.3s ease, border-color 0.3s ease;
+        }
+        .form-control:focus {
+            border-color: #f49a9a;
+            box-shadow: 0 0 10px #f49a9a;
+            outline: none;
+        }
+        .btn-primary {
+            background: linear-gradient(45deg, #d95c5c, #f49a9a);
+            border: none;
+            border-radius: 25px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            padding: 10px 30px;
+            box-shadow: 0 8px 20px rgba(244, 154, 154, 0.7);
+            transition: background 0.4s ease, box-shadow 0.4s ease;
+        }
+        .btn-primary:hover {
+            background: linear-gradient(45deg, #f49a9a, #d95c5c);
+            box-shadow: 0 12px 30px rgba(244, 154, 154, 0.9);
+        }
+        .result {
+            margin-top: 10px;
+            font-weight: 600;
+            color: #a94141;
+            background: #ffe6e6;
+            padding: 10px;
+            border-radius: 10px;
+            min-height: 40px;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
         <table class="table">
-            <!-- Tiêu đề -->
             <tr>
-                <td style="text-align: center; font-weight: bold; font-size: 25px;">VIGENERE CIPHER</td>
+                <td>VIGENERE CIPHER</td>
             </tr>
 
-            <!-- Phần mã hóa -->
             <tr>
-                <td style="font-weight: bold; color: blue;">ENCRYPTION</td>
+                <td>ENCRYPTION</td>
             </tr>
             <tr>
                 <td>
-                    <form method="POST" action="vigenere/encrypt">
+                    <form id="encryptForm">
                         <div class="mb-3">
-                            <label class="form-label">Plain text:</label>
-                            <input type="text" class="form-control" name="inputPlainText" placeholder="Input Plain Text" required autofocus>
+                            <label for="inputPlainText">Plain text:</label>
+                            <input type="text" class="form-control" id="inputPlainText" name="inputPlainText" placeholder="Input Plain Text" required autofocus>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Key:</label>
-                            <input type="" class="form-control" name="inputKeyPlain" placeholder="Input Key" required>
+                            <label for="inputKeyPlain">Key:</label>
+                            <input type="text" class="form-control" id="inputKeyPlain" name="inputKeyPlain" placeholder="Input Key" required>
                         </div>
                         <button type="submit" class="btn btn-primary">Encrypt</button>
                     </form>
+                    <div id="encryptResult" class="result"></div>
                 </td>
             </tr>
 
-            <!-- Phần giải mã -->
             <tr>
-                <td style="font-weight: bold; color: blue;">DECRYPTION</td>
+                <td>DECRYPTION</td>
             </tr>
             <tr>
                 <td>
-                    <form method="POST" action="vigenere/decrypt">
+                    <form id="decryptForm">
                         <div class="mb-3">
-                            <label class="form-label">Cipher text:</label>
-                            <input type="text" class="form-control" name="inputCipherText" placeholder="Input Cipher Text" required>
+                            <label for="inputCipherText">Cipher text:</label>
+                            <input type="text" class="form-control" id="inputCipherText" name="inputCipherText" placeholder="Input Cipher Text" required>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Key:</label>
-                            <input type="" class="form-control" name="inputKeyCipher" placeholder="Input Key" required>
+                            <label for="inputKeyCipher">Key:</label>
+                            <input type="text" class="form-control" id="inputKeyCipher" name="inputKeyCipher" placeholder="Input Key" required>
                         </div>
                         <button type="submit" class="btn btn-primary">Decrypt</button>
                     </form>
+                    <div id="decryptResult" class="result"></div>
                 </td>
             </tr>
         </table>
     </div>
+
+<script>
+function vigenereEncrypt(plaintext, key) {
+    plaintext = plaintext.toUpperCase().replace(/[^A-Z]/g, '');
+    key = key.toUpperCase().replace(/[^A-Z]/g, '');
+    let result = '';
+    for (let i = 0, j = 0; i < plaintext.length; i++) {
+        let p = plaintext.charCodeAt(i) - 65;
+        let k = key.charCodeAt(j % key.length) - 65;
+        result += String.fromCharCode((p + k) % 26 + 65);
+        j++;
+    }
+    return result;
+}
+
+function vigenereDecrypt(ciphertext, key) {
+    ciphertext = ciphertext.toUpperCase().replace(/[^A-Z]/g, '');
+    key = key.toUpperCase().replace(/[^A-Z]/g, '');
+    let result = '';
+    for (let i = 0, j = 0; i < ciphertext.length; i++) {
+        let c = ciphertext.charCodeAt(i) - 65;
+        let k = key.charCodeAt(j % key.length) - 65;
+        result += String.fromCharCode((c - k + 26) % 26 + 65);
+        j++;
+    }
+    return result;
+}
+
+document.getElementById('encryptForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const plaintext = document.getElementById('inputPlainText').value;
+    const key = document.getElementById('inputKeyPlain').value;
+    const encrypted = vigenereEncrypt(plaintext, key);
+    document.getElementById('encryptResult').textContent = 'Encrypted Text: ' + encrypted;
+});
+
+document.getElementById('decryptForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const ciphertext = document.getElementById('inputCipherText').value;
+    const key = document.getElementById('inputKeyCipher').value;
+    const decrypted = vigenereDecrypt(ciphertext, key);
+    document.getElementById('decryptResult').textContent = 'Decrypted Text: ' + decrypted;
+});
+</script>
 </body>
 </html>

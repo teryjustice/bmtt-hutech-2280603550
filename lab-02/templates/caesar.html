@@ -1,57 +1,164 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Caesar Cipher</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Caesar Cipher - Anime Style</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
+<style>
+    /* (Giữ nguyên style anime bạn đã có) */
+    body {
+        background: linear-gradient(135deg, #f7d2f0, #a18cd1);
+        font-family: 'Comic Sans MS', cursive, sans-serif;
+        min-height: 100vh;
+        padding-top: 40px;
+        color: #4b2e83;
+    }
+    h2 {
+        text-shadow: 2px 2px 6px #d3a1f9;
+    }
+    .card {
+        border-radius: 20px;
+        box-shadow: 0 8px 20px rgba(164, 76, 255, 0.3);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 15px 35px rgba(164, 76, 255, 0.6);
+    }
+    .card-header {
+        background: linear-gradient(45deg, #a44cff, #ffb7ff);
+        border-radius: 20px 20px 0 0;
+        font-weight: 700;
+        font-size: 1.3rem;
+        text-shadow: 1px 1px 3px #7a3cc1;
+        color: white;
+    }
+    .form-control {
+        border-radius: 15px;
+        border: 2px solid #a44cff;
+        box-shadow: 0 4px 8px rgba(164, 76, 255, 0.25);
+        transition: box-shadow 0.3s ease;
+    }
+    .form-control:focus {
+        border-color: #ff9ff3;
+        box-shadow: 0 0 12px 3px #ff9ff3;
+        outline: none;
+    }
+    label {
+        font-weight: 600;
+        color: #7a3cc1;
+        font-size: 1.1rem;
+    }
+    .btn-primary {
+        background: linear-gradient(45deg, #a44cff, #ffb7ff);
+        border: none;
+        border-radius: 25px;
+        font-weight: 700;
+        font-size: 1.1rem;
+        box-shadow: 0 6px 15px rgba(255, 183, 255, 0.6);
+        transition: background 0.4s ease, box-shadow 0.4s ease;
+    }
+    .btn-primary:hover {
+        background: linear-gradient(45deg, #ffb7ff, #a44cff);
+        box-shadow: 0 10px 25px rgba(255, 183, 255, 0.9);
+    }
+</style>
 </head>
 <body>
-    <div class="container">
-        <table class="table">
-            <!-- Tiêu đề -->
-            <tr>
-                <td style="text-align: center; font-weight: bold; font-size: 25px;">CAESAR CIPHER</td>
-            </tr>
+<div class="container mt-5">
+    <h2 class="text-center font-weight-bold mb-4">CAESAR CIPHER</h2>
 
-            <!-- Phần mã hóa -->
-            <tr>
-                <td style="font-weight: bold; color: blue;">ENCRYPTION</td>
-            </tr>
-            <tr>
-                <td>
-                    <form method="POST" action="caesar/encrypt">
-                        <div class="mb-3">
-                            <label class="form-label">Plain text:</label>
-                            <input type="text" class="form-control" name="inputPlainText" placeholder="Input Plain Text" required autofocus>
+    <div class="row">
+        <!-- Encryption form -->
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    ENCRYPTION
+                </div>
+                <div class="card-body">
+                    <form id="encryptForm" onsubmit="return encryptText(event)">
+                        <div class="form-group">
+                            <label for="inputPlainText">Plain text:</label>
+                            <input type="text" class="form-control" id="inputPlainText" placeholder="Input Plain Text" required autofocus>
                         </div>
-                        <div class="mb-3">
-                            <label class="form-label">Key:</label>
-                            <input type="number" class="form-control" name="inputKeyPlain" placeholder="Input Key" required>
+                        <div class="form-group">
+                            <label for="inputKeyPlain">Key:</label>
+                            <input type="number" class="form-control" id="inputKeyPlain" placeholder="Input Key" required min="0" max="25">
                         </div>
-                        <button type="submit" class="btn btn-primary">Encrypt</button>
+                        <button type="submit" class="btn btn-primary btn-block">Encrypt</button>
                     </form>
-                </td>
-            </tr>
+                </div>
+            </div>
+        </div>
 
-            <!-- Phần giải mã -->
-            <tr>
-                <td style="font-weight: bold; color: blue;">DECRYPTION</td>
-            </tr>
-            <tr>
-                <td>
-                    <form method="POST" action="caesar/decrypt">
-                        <div class="mb-3">
-                            <label class="form-label">Cipher text:</label>
-                            <input type="text" class="form-control" name="inputCipherText" placeholder="Input Cipher Text" required>
+        <!-- Decryption form -->
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    DECRYPTION
+                </div>
+                <div class="card-body">
+                    <form id="decryptForm" onsubmit="return decryptText(event)">
+                        <div class="form-group">
+                            <label for="inputCipherText">Cipher text:</label>
+                            <input type="text" class="form-control" id="inputCipherText" placeholder="Input Cipher Text" required>
                         </div>
-                        <div class="mb-3">
-                            <label class="form-label">Key:</label>
-                            <input type="number" class="form-control" name="inputKeyCipher" placeholder="Input Key" required>
+                        <div class="form-group">
+                            <label for="inputKeyCipher">Key:</label>
+                            <input type="number" class="form-control" id="inputKeyCipher" placeholder="Input Key" required min="0" max="25">
                         </div>
-                        <button type="submit" class="btn btn-primary">Decrypt</button>
+                        <button type="submit" class="btn btn-primary btn-block">Decrypt</button>
                     </form>
-                </td>
-            </tr>
-        </table>
+                </div>
+            </div>
+        </div>
     </div>
+</div>
+
+<script>
+    // Hàm Caesar Encrypt (shift ký tự chữ cái)
+    function caesarEncrypt(str, shift) {
+        return str.replace(/[a-z]/gi, c => {
+            const base = c <= 'Z' ? 65 : 97;
+            return String.fromCharCode((c.charCodeAt(0) - base + shift) % 26 + base);
+        });
+    }
+
+    // Hàm Caesar Decrypt
+    function caesarDecrypt(str, shift) {
+        return caesarEncrypt(str, (26 - shift) % 26);
+    }
+
+    function encryptText(event) {
+        event.preventDefault();
+        const plainText = document.getElementById('inputPlainText').value;
+        let key = parseInt(document.getElementById('inputKeyPlain').value);
+        if (isNaN(key) || key < 0 || key > 25) {
+            alert('Key must be a number between 0 and 25');
+            return false;
+        }
+        const cipherText = caesarEncrypt(plainText, key);
+        // Update Decrypt input fields
+        document.getElementById('inputCipherText').value = cipherText;
+        document.getElementById('inputKeyCipher').value = key;
+        return false; // prevent reload
+    }
+
+    function decryptText(event) {
+        event.preventDefault();
+        const cipherText = document.getElementById('inputCipherText').value;
+        let key = parseInt(document.getElementById('inputKeyCipher').value);
+        if (isNaN(key) || key < 0 || key > 25) {
+            alert('Key must be a number between 0 and 25');
+            return false;
+        }
+        const plainText = caesarDecrypt(cipherText, key);
+        // Update Encrypt input fields
+        document.getElementById('inputPlainText').value = plainText;
+        document.getElementById('inputKeyPlain').value = key;
+        return false; // prevent reload
+    }
+</script>
 </body>
 </html>

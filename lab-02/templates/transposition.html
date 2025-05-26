@@ -1,31 +1,112 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Caesar Cipher</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Transposition Cipher</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
+    <style>
+        body {
+            background: linear-gradient(135deg, #fceabb, #f8b500);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            padding: 40px 0;
+            color: #5b3e00;
+        }
+        .container {
+            max-width: 600px;
+            background: #fffbe6;
+            padding: 30px 40px;
+            border-radius: 25px;
+            box-shadow: 0 12px 35px rgba(248, 181, 0, 0.4);
+            animation: fadeIn 1s ease forwards;
+        }
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 15px;
+        }
+        /* Tiêu đề */
+        tr:first-child td {
+            text-align: center;
+            font-weight: 900;
+            font-size: 32px;
+            padding-bottom: 25px;
+            color: #d97d00;
+            text-shadow: 2px 2px 5px #e2a400;
+            animation: glow 2.5s ease-in-out infinite alternate;
+        }
+        /* Phần encrypt/decrypt */
+        tr:nth-child(2) td, tr:nth-child(5) td {
+            font-weight: 700;
+            font-size: 18px;
+            color: #b36b00;
+            border-bottom: 2px solid #b36b00;
+            padding-bottom: 6px;
+        }
+        label {
+            font-weight: 600;
+            color: #6a4500;
+            font-size: 1rem;
+        }
+        .form-control {
+            border-radius: 12px;
+            border: 2px solid #d97d00;
+            box-shadow: 0 4px 8px rgba(217, 125, 0, 0.25);
+            transition: box-shadow 0.3s ease, border-color 0.3s ease;
+        }
+        .form-control:focus {
+            border-color: #ffb300;
+            box-shadow: 0 0 12px #ffb300;
+            outline: none;
+        }
+        .btn-primary {
+            background: linear-gradient(45deg, #d97d00, #ffb300);
+            border: none;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            padding: 10px 30px;
+            box-shadow: 0 8px 20px rgba(255, 179, 0, 0.7);
+            transition: background 0.4s ease, box-shadow 0.4s ease;
+        }
+        .btn-primary:hover {
+            background: linear-gradient(45deg, #ffb300, #d97d00);
+            box-shadow: 0 12px 30px rgba(255, 179, 0, 0.9);
+        }
+
+        @keyframes glow {
+            0% { text-shadow: 2px 2px 5px #e2a400; }
+            100% { text-shadow: 2px 2px 15px #ffcf33; }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
 </head>
 <body>
     <div class="container">
         <table class="table">
             <!-- Tiêu đề -->
             <tr>
-                <td style="text-align: center; font-weight: bold; font-size: 25px;">TRANS CIPHER</td>
+                <td>TRANS CIPHER</td>
             </tr>
 
             <!-- Phần mã hóa -->
             <tr>
-                <td style="font-weight: bold; color: blue;">ENCRYPTION</td>
+                <td>ENCRYPTION</td>
             </tr>
             <tr>
                 <td>
                     <form method="POST" action="transposition/encrypt">
                         <div class="mb-3">
-                            <label class="form-label">Plain text:</label>
-                            <input type="text" class="form-control" name="inputPlainText" placeholder="Input Plain Text" required autofocus>
+                            <label for="inputPlainText">Plain text:</label>
+                            <input type="text" class="form-control" id="inputPlainText" name="inputPlainText" placeholder="Input Plain Text" required autofocus>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Key:</label>
-                            <input type="number" class="form-control" name="inputKeyPlain" placeholder="Input Key" required>
+                            <label for="inputKeyPlain">Key:</label>
+                            <input type="number" class="form-control" id="inputKeyPlain" name="inputKeyPlain" placeholder="Input Key" required>
                         </div>
                         <button type="submit" class="btn btn-primary">Encrypt</button>
                     </form>
@@ -34,18 +115,18 @@
 
             <!-- Phần giải mã -->
             <tr>
-                <td style="font-weight: bold; color: blue;">DECRYPTION</td>
+                <td>DECRYPTION</td>
             </tr>
             <tr>
                 <td>
                     <form method="POST" action="transposition/decrypt">
                         <div class="mb-3">
-                            <label class="form-label">Cipher text:</label>
-                            <input type="text" class="form-control" name="inputCipherText" placeholder="Input Cipher Text" required>
+                            <label for="inputCipherText">Cipher text:</label>
+                            <input type="text" class="form-control" id="inputCipherText" name="inputCipherText" placeholder="Input Cipher Text" required>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Key:</label>
-                            <input type="number" class="form-control" name="inputKeyCipher" placeholder="Input Key" required>
+                            <label for="inputKeyCipher">Key:</label>
+                            <input type="number" class="form-control" id="inputKeyCipher" name="inputKeyCipher" placeholder="Input Key" required>
                         </div>
                         <button type="submit" class="btn btn-primary">Decrypt</button>
                     </form>
