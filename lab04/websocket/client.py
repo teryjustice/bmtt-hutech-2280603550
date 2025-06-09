@@ -15,7 +15,7 @@ class WebSocketClient:
     def connect_and_read(self):
         print("[Re]connecting...")
         tornado.websocket.websocket_connect(
-            url="ws://localhost:8888/websocket/",
+            url="ws://localhost:8888/websocket",
             callback=self.maybe_retry_connection,
             on_message_callback=self.on_message,
             ping_interval=10,
